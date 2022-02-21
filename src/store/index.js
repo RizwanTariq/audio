@@ -2,7 +2,7 @@ import { createStore } from 'vuex';
 
 export default createStore({
   state: {
-    authShow: true,
+    authShow: false,
   },
   mutations: {
     toggleAuth: (state) => {
@@ -12,4 +12,7 @@ export default createStore({
   },
   actions: {},
   modules: {},
+  getters: {
+    // authShow: (state) => state.authShow,
+  },
 });
