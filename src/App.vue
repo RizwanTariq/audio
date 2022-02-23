@@ -10,5 +10,8 @@ export default {
   components: {
     AppHeader,
   },
+  created() {
+    this.$store.dispatch('initLogin');
+  },
 };
 </script>

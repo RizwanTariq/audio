@@ -55,21 +55,28 @@ export default {
     };
   },
   methods: {
-    handleLogin(values) {
+    async handleLogin(values) {
       this.loginShowAlert = true;
       this.loginInSubmition = true;
       this.loginAlertVarient = 'bg-blue-500';
       this.loginAlertMsg = 'Please wait! authenticating credentials.';
 
-      setTimeout(() => {
-        this.loginAlertVarient = 'bg-green-500';
-        this.loginAlertMsg = 'Success! logging in.';
-        setTimeout(() => {
-          this.loginShowAlert = false;
-          this.loginInSubmition = false;
-        }, 1000);
-        console.log(values);
-      }, 5000);
+      try {
+        await this.$store.dispatch('loginUser', values);
+      } catch (err) {
+        this.loginInSubmition = false;
+        this.loginAlertVarient = 'bg-red-500';
+        this.regAlertMsg =
+          'An unexpected error occured. Please check your credentials try again later.';
+        console.log('ERROR', err);
+        return;
+      }
+
+      this.loginAlertVarient = 'bg-green-500';
+      this.loginAlertMsg = 'Success! logging in.';
+      this.loginShowAlert = false;
+      this.loginInSubmition = false;
+      window.location.reload();
     },
   },
 };

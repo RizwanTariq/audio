@@ -106,6 +106,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex';
 export default {
   name: 'Register',
   data() {
@@ -129,21 +130,33 @@ export default {
     };
   },
   methods: {
-    handleRegister(values) {
+    ...mapActions(['registerUser']),
+    async handleRegister(values) {
+      //Initialize Register
       this.regShowAlert = true;
       this.regInSubmition = true;
       this.regAlertVarient = 'bg-blue-500';
       this.regAlertMsg = 'Please wait! your account is being created.';
 
-      setTimeout(() => {
-        this.regAlertVarient = 'bg-green-500';
-        this.regAlertMsg = 'Success! your account is created.';
-        setTimeout(() => {
-          this.regShowAlert = false;
-          this.regInSubmition = false;
-        }, 1000);
-        console.log(values);
-      }, 5000);
+      //Registering User with firebase authentication
+
+      try {
+        await this.registerUser(values);
+        // await this.$store.dispatch('registerUser', values);
+      } catch (err) {
+        this.regInSubmition = false;
+        this.regAlertVarient = 'bg-red-500';
+        this.regAlertMsg =
+          'An unexpected error occured. Please try again later.';
+        console.log('ERROR', err);
+        return;
+      }
+      //Storing User Details in firestore
+      this.regAlertVarient = 'bg-green-500';
+      this.regAlertMsg = 'Success! your account is created.';
+      this.regShowAlert = false;
+      this.regInSubmition = false;
+      window.location.reload();
     },
   },
 };
