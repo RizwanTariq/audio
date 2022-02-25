@@ -24,6 +24,8 @@ export default createStore({
     },
   },
   actions: {
+    // User Register Action
+
     async registerUser(context, payload) {
       const { doc, setDoc } = document;
       const { updateProfile, createUserWithEmailAndPassword } = authenticate;
@@ -48,12 +50,18 @@ export default createStore({
       //Testing
       console.log('Authentication', userCred);
     },
+
+    //Initiate login on first App Load Action
+
     initLogin(context) {
       const user = auth.currentUser;
       if (user) {
         context.commit('toggleLoggedIn');
       }
     },
+
+    // User Login Action
+
     async loginUser(context, payload) {
       const { signInWithEmailAndPassword } = authenticate;
 
@@ -70,6 +78,9 @@ export default createStore({
         console.log('Authentication', userCred);
       }
     },
+
+    //UserLogout Action
+
     async logoutUser(context) {
       console.log('Logout');
       const { signOut } = authenticate;
