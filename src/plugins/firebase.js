@@ -6,7 +6,24 @@ import {
   signOut,
   updateProfile,
 } from 'firebase/auth';
-import { getFirestore, collection, doc, setDoc } from 'firebase/firestore';
+import {
+  getFirestore,
+  collection,
+  doc,
+  setDoc,
+  getDocs,
+  query,
+  where,
+  deleteDoc,
+} from 'firebase/firestore';
+
+import {
+  getStorage,
+  ref as sRef,
+  uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+} from 'firebase/storage';
 
 const firebaseConfig = {
   apiKey: 'AIzaSyBogczGVlTZoU89rHjGqJtaWtGYnvWU0gQ',
@@ -23,9 +40,18 @@ export default app;
 
 export const auth = getAuth();
 export const db = getFirestore(app);
+const storage = getStorage();
+export const firebaseStorage = {
+  storage,
+  sRef,
+  uploadAudio: uploadBytesResumable,
+  getDownloadURL,
+  deleteObject,
+};
 
 export const usersCollection = collection(db, 'users');
-export const document = { doc, setDoc };
+export const songsCollection = collection(db, 'songs');
+export const document = { doc, setDoc, getDocs, query, where, deleteDoc };
 export const authenticate = {
   signOut,
   createUserWithEmailAndPassword,

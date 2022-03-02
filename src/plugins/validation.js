@@ -21,6 +21,7 @@ export default {
     app.component('ErrorMessage', ErrorMessage);
 
     defineRule('required', required);
+    defineRule('song_required', required);
     defineRule('terms_required', required);
     defineRule('alpha_spaces', alpha_spaces);
     defineRule('min', min);
@@ -33,6 +34,7 @@ export default {
       generateMessage(context) {
         const messages = {
           required: `The field ${context.field} is required.`,
+          song_required: `The field song name is required.`,
           min: `The field ${context.field} is too short.`,
           max: `The field ${context.field} is too long.`,
           email: `The field ${context.field}  must be valid email.`,

@@ -3,6 +3,7 @@ import {
   authenticate,
   auth,
   usersCollection,
+  songsCollection,
   document,
 } from '@/plugins/firebase';
 
@@ -10,6 +11,7 @@ export default createStore({
   state: {
     authShow: false,
     userLoggedin: false,
+    mySongs: [],
   },
   mutations: {
     toggleAuth: (state) => {
@@ -21,6 +23,11 @@ export default createStore({
       state.userLoggedin = !state.userLoggedin;
       //Testing
       console.log('Toggled UserLoggedIn Property', state.userLoggedin);
+    },
+    mutateMySongs: (state, payload) => {
+      state.mySongs = [...payload];
+      //Testing
+      console.log('mutateMySongs mutation');
     },
   },
   actions: {
@@ -86,6 +93,27 @@ export default createStore({
       const { signOut } = authenticate;
       await signOut(auth);
       context.commit('toggleLoggedIn');
+    },
+
+    //Upload Song Action
+
+    async mySongsAction(context) {
+      const { query, where, getDocs } = document;
+      const q = query(
+        songsCollection,
+        where('uid', '==', auth.currentUser.uid)
+      );
+      const querySnapshot = await getDocs(q);
+      let songs = [];
+      console.log(querySnapshot);
+      querySnapshot.forEach((doc) => {
+        songs.push({
+          id: doc.id,
+          data: doc.data(),
+          showForm: false,
+        });
+      });
+      context.commit('mutateMySongs', songs);
     },
   },
   modules: {},
