@@ -12,7 +12,11 @@ import {
   doc,
   setDoc,
   getDocs,
+  getDoc,
   query,
+  orderBy,
+  limit,
+  startAfter,
   where,
   deleteDoc,
 } from 'firebase/firestore';
@@ -51,7 +55,18 @@ export const firebaseStorage = {
 
 export const usersCollection = collection(db, 'users');
 export const songsCollection = collection(db, 'songs');
-export const document = { doc, setDoc, getDocs, query, where, deleteDoc };
+export const document = {
+  doc,
+  setDoc,
+  getDocs,
+  getDoc,
+  query,
+  where,
+  deleteDoc,
+  startAfter,
+  orderBy,
+  limit,
+};
 export const authenticate = {
   signOut,
   createUserWithEmailAndPassword,

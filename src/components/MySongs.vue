@@ -184,8 +184,12 @@ export default {
         //Reseting Alert Values and setting new array of songs in state
         this.editSongAlertMsg = 'Song name is successfully edited.';
         this.editSongAlertVarient = 'bg-green-500';
-        this.editSongShowAlert = false;
         this.editSongInSubmition = false;
+
+        this.$store.dispatch('mySongsAction');
+        setTimeout(() => {
+          this.editSongShowAlert = false;
+        }, 1000);
         // this.songs = this.songs.map((s) => {
         //   if (s.id === newSong.id) {
         //     return newSong;
@@ -193,7 +197,6 @@ export default {
         //     return s;
         //   }
         // });
-        this.$store.dispatch('mySongsAction');
       } catch (error) {
         //Reseting Alert Values and setting new array of songs in state
         this.editSongAlertMsg =
