@@ -53,7 +53,7 @@
                 type="text"
                 name="modifiedName"
                 v-model="modifiedName"
-                @input.prevent="updateUnsavedFlag(true)"
+                @keydown="updateUnsavedFlag(true)"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter New Song Title"
               />
@@ -64,7 +64,7 @@
                 type="text"
                 name="genre"
                 v-model="genre"
-                @input.prevent="updateUnsavedFlag(true)"
+                @keydown="updateUnsavedFlag(true)"
                 class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
                 placeholder="Enter Song Genre"
               />
@@ -72,7 +72,6 @@
             </div>
             <button
               type="submit"
-              @input.prevent="updateUnsavedFlag(false)"
               :disabled="editSongInSubmition"
               class="py-1.5 px-3 rounded text-white bg-green-600 m-1"
             >
@@ -142,6 +141,7 @@ export default {
   // },
   methods: {
     async handleSongEdit(song) {
+      this.updateUnsavedFlag(false);
       //setting Alert Values
       this.editSongShowAlert = true;
       this.editSongInSubmition = true;
@@ -186,7 +186,10 @@ export default {
         this.editSongAlertVarient = 'bg-green-500';
         this.editSongInSubmition = false;
 
-        this.$store.dispatch('mySongsAction');
+        this.$store.dispatch('mySongsAction', {
+          method: 'edit',
+          song: newSong,
+        });
         setTimeout(() => {
           this.editSongShowAlert = false;
         }, 1000);
@@ -220,7 +223,7 @@ export default {
         await deleteDoc(doc(songsCollection, song.id));
         await deleteObject(songRef);
         // this.songs = this.songs.filter((s) => s.id !== song.id);
-        this.$store.dispatch('mySongsAction');
+        this.$store.dispatch('mySongsAction', { method: 'delete', song });
         // this.deleteSongShowAlert = false;
         this.deleteSongInSubmition = false;
         // this.deleteSongAlertVarient = 'bg-green-500';
