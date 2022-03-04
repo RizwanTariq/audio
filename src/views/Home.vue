@@ -14,17 +14,21 @@ import {
   document as firebaseDocument,
 } from '../plugins/firebase';
 import { startAfter } from '@firebase/firestore';
+import { mapState } from 'vuex';
 
 export default {
   components: { Intro, MainContent },
   name: 'Home',
   data() {
     return {
-      allSongs: [],
+      // allSongs: [],
       maxPerPage: 5,
       lastVisible: {},
       pendingRequest: false,
     };
+  },
+  computed: {
+    ...mapState(['allSongs']),
   },
   async created() {
     this.getSongs();
@@ -42,7 +46,7 @@ export default {
         Math.floor(scrollTop) + innerHeight === offsetHeight;
       if (bottomOfWindow) {
         this.getSongs();
-        console.log('BottomOfWindow');
+        console.log('BottomOfWindow', this.lastVisible);
       }
     },
     async getSongs() {
@@ -76,13 +80,16 @@ export default {
         );
       }
       const querySnapshot = await getDocs(q);
-      this.lastVisible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      let l_Visible = querySnapshot.docs[querySnapshot.docs.length - 1];
+      this.lastVisible = l_Visible ? l_Visible : this.lastVisible;
+      let aSongs = [...this.allSongs];
       querySnapshot.forEach((doc) => {
-        this.allSongs.push({
+        aSongs.push({
           id: doc.id,
           ...doc.data(),
         });
       });
+      this.$store.dispatch('allSongsAction', aSongs);
       this.pendingRequest = false;
     },
   },

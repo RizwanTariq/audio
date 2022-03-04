@@ -138,7 +138,7 @@ export default {
             // console.log(songDetails);
             await setDoc(doc(songsCollection), songDetails);
 
-            this.$store.dispatch('mySongsAction');
+            this.$store.dispatch('mySongsAction', { method: 'upload' });
             this.uploadings[uploadingIndex - 1].varient = 'bg-green-400';
             this.uploadings[uploadingIndex - 1].icon = 'fas fa-check';
             this.uploadings[uploadingIndex - 1].textClass = 'text-green-400';
