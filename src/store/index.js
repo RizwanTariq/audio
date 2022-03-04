@@ -12,6 +12,7 @@ export default createStore({
     authShow: false,
     userLoggedin: false,
     mySongs: [],
+    allSongs: [],
   },
   mutations: {
     toggleAuth: (state) => {
@@ -26,6 +27,11 @@ export default createStore({
     },
     mutateMySongs: (state, payload) => {
       state.mySongs = [...payload];
+      //Testing
+      console.log('mutateMySongs mutation');
+    },
+    mutateAllSongs: (state, payload) => {
+      state.allSongs = [...payload];
       //Testing
       console.log('mutateMySongs mutation');
     },
@@ -97,27 +103,52 @@ export default createStore({
 
     //Upload Song Action
 
-    async mySongsAction(context) {
-      const { query, where, getDocs } = document;
-      const q = query(
-        songsCollection,
-        where('uid', '==', auth.currentUser.uid)
-      );
-      const querySnapshot = await getDocs(q);
+    async mySongsAction(context, payload) {
       let songs = [];
-      console.log(querySnapshot);
-      querySnapshot.forEach((doc) => {
-        songs.push({
-          id: doc.id,
-          data: doc.data(),
-          showForm: false,
+      if (!payload || payload.method === 'upload') {
+        console.log('Upload & Get');
+        const { query, where, getDocs } = document;
+        const q = query(
+          songsCollection,
+          where('uid', '==', auth.currentUser.uid)
+        );
+        const querySnapshot = await getDocs(q);
+
+        querySnapshot.forEach((doc) => {
+          songs.push({
+            id: doc.id,
+            data: doc.data(),
+            showForm: false,
+          });
         });
-      });
-      context.commit('mutateMySongs', songs);
+        context.commit('mutateMySongs', songs);
+      } else if (payload && payload.method === 'edit') {
+        console.log('Edited');
+        songs = context.state.mySongs.map((s) => {
+          if (s.id === payload.song.id) {
+            return payload.song;
+          } else {
+            return s;
+          }
+        });
+        context.commit('mutateMySongs', songs);
+      } else if (payload && payload.method === 'delete') {
+        console.log('deleted');
+        songs = context.state.mySongs.filter((s) => s.id !== payload.song.id);
+        context.commit('mutateMySongs', songs);
+      }
+    },
+
+    //All Songs Action
+    allSongsAction(context, payload) {
+      context.commit('mutateAllSongs', payload);
     },
   },
   modules: {},
   getters: {
     // authShow: (state) => state.authShow,
+    getSong: (state) => (id) => {
+      return state.allSongs.find((s) => s.id === id);
+    },
   },
 });

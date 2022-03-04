@@ -55,6 +55,7 @@ export const firebaseStorage = {
 
 export const usersCollection = collection(db, 'users');
 export const songsCollection = collection(db, 'songs');
+export const commentsCollection = collection(db, 'comments');
 export const document = {
   doc,
   setDoc,
