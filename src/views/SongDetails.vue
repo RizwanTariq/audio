@@ -1,85 +1,91 @@
 <template>
-  <section class="w-full mb-8 py-14 text-center text-white relative">
-    <div
-      class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
-      style="background-image: url(/assets/img/song-header.png)"
-    ></div>
-    <div class="container mx-auto flex items-center">
-      <button
-        type="button"
-        class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
-      >
-        <i class="fas fa-play"></i>
-      </button>
-      <div class="z-50 text-left ml-8">
-        <div class="text-3xl font-bold">{{ song.modifiedName }}</div>
-        <div>{{ song.genre }}</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Main Content -->
-  <section class="container mx-auto mt-6">
-    <div class="bg-white rounded border border-gray-200 relative flex flex-col">
-      <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
-        <span class="card-title">Comments ({{ commentCount }})</span>
-        <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
-      </div>
-      <div class="p-6">
-        <div
-          class="text-white text-center font-bold p-5 mb-4"
-          v-if="commentShowAlert"
-          :class="commentAlertVarient"
+  <main>
+    <section class="w-full mb-8 py-14 text-center text-white relative">
+      <div
+        class="absolute inset-0 w-full h-full box-border bg-contain music-bg"
+        style="background-image: url(/assets/img/song-header.png)"
+      ></div>
+      <div class="container mx-auto flex items-center">
+        <button
+          @click.prevent="playSongAction(song)"
+          type="button"
+          class="z-50 h-24 w-24 text-3xl bg-white text-black rounded-full focus:outline-none"
         >
-          {{ commentAlertMsg }}
+          <i class="fas fa-play"></i>
+        </button>
+        <div class="z-50 text-left ml-8">
+          <div class="text-3xl font-bold">{{ song.modifiedName }}</div>
+          <div>{{ song.genre }}</div>
         </div>
-        <vee-form
-          @submit="handleCommentSubmit"
-          :validation-schema="schema"
-          v-if="userLoggedin"
-        >
-          <vee-field
-            class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
-            placeholder="Your comment here..."
-            name="comment"
-            as="textarea"
-          ></vee-field>
-          <ErrorMessage class="text-red-600 block" name="comment" />
-          <button
-            type="submit"
-            :disabled="commentInSubmition"
-            class="py-1.5 px-3 rounded text-white bg-green-600"
-          >
-            Submit
-          </button>
-        </vee-form>
-        <select
-          class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
-          @change.prevent="sort($event)"
-        >
-          <option value="0">Latest</option>
-          <option value="1">Oldest</option>
-        </select>
       </div>
-    </div>
-  </section>
-  <ul class="container mx-auto">
-    <li
-      class="p-6 bg-gray-50 border border-gray-200"
-      v-for="comment in comments"
-      :key="comment.id"
-    >
-      <!-- Comment Author -->
-      <div class="mb-5">
-        <div class="font-bold">{{ comment.userName }}</div>
-        <time>{{ timeDiff(comment.datePosted) }} ago</time>
-      </div>
+    </section>
 
-      <p>
-        {{ comment.comment }}
-      </p>
-    </li>
-  </ul>
+    <!-- Main Content -->
+    <section class="container mx-auto mt-6" id="comments">
+      <div
+        class="bg-white rounded border border-gray-200 relative flex flex-col"
+      >
+        <div class="px-6 pt-6 pb-5 font-bold border-b border-gray-200">
+          <span class="card-title">Comments ({{ commentCount }})</span>
+          <i class="fa fa-comments float-right text-green-400 text-2xl"></i>
+        </div>
+        <div class="p-6">
+          <div
+            class="text-white text-center font-bold p-5 mb-4"
+            v-if="commentShowAlert"
+            :class="commentAlertVarient"
+          >
+            {{ commentAlertMsg }}
+          </div>
+          <vee-form
+            @submit="handleCommentSubmit"
+            :validation-schema="schema"
+            v-if="userLoggedin"
+          >
+            <vee-field
+              class="block w-full py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded mb-4"
+              placeholder="Your comment here..."
+              name="comment"
+              as="textarea"
+            ></vee-field>
+            <ErrorMessage class="text-red-600 block" name="comment" />
+            <button
+              type="submit"
+              :disabled="commentInSubmition"
+              class="py-1.5 px-3 rounded text-white bg-green-600"
+            >
+              Submit
+            </button>
+          </vee-form>
+          <select
+            class="block mt-4 py-1.5 px-3 text-gray-800 border border-gray-300 transition duration-500 focus:outline-none focus:border-black rounded"
+            @change.prevent="sort()"
+            v-model="comSort"
+          >
+            <option value="0">Latest</option>
+            <option value="1">Oldest</option>
+          </select>
+        </div>
+      </div>
+    </section>
+    <ul class="container mx-auto">
+      <li
+        class="p-6 bg-gray-50 border border-gray-200"
+        v-for="comment in comments"
+        :key="comment.id"
+      >
+        <!-- Comment Author -->
+        <div class="mb-5">
+          <div class="font-bold">{{ comment.userName }}</div>
+          <time>{{ timeDiff(comment.datePosted) }} ago</time>
+        </div>
+
+        <p>
+          {{ comment.comment }}
+        </p>
+      </li>
+    </ul>
+  </main>
 </template>
 
 <script>
@@ -89,7 +95,8 @@ import {
   commentsCollection,
   auth,
 } from '@/plugins/firebase';
-import { mapState } from 'vuex';
+import { mapState, mapActions } from 'vuex';
+import { query } from '@firebase/firestore';
 
 export default {
   name: 'SongDetails',
@@ -101,6 +108,7 @@ export default {
       song: {},
       comments: [],
       id: this.$route.params.id,
+      comSort: 0,
       commentShowAlert: false,
       commentAlertVarient: '',
       commentAlertMsg: '',
@@ -113,26 +121,39 @@ export default {
       return this.comments ? this.comments.length : 0;
     },
   },
+  watch: {
+    comSort(newVal) {
+      if (newVal == this.$route.query.comSort) {
+        return;
+      }
+      this.$router.push({
+        query: {
+          comSort: newVal,
+        },
+      });
+    },
+  },
   methods: {
+    ...mapActions(['playSongAction']),
     timeDiff(date) {
       const dt1 = new Date();
       const dt2 = new Date(date);
-      var diff = (dt2.getTime() - dt1.getTime()) / 1000;
+      let diff = (dt2.getTime() - dt1.getTime()) / 1000;
       diff /= 60;
       const time = Math.abs(Math.round(diff));
       if (time < 100) {
         return time + ' mins';
       } else {
-        var num = time;
-        var hours = num / 60;
-        var rhours = Math.floor(hours);
-        var minutes = (hours - rhours) * 60;
-        var rminutes = Math.round(minutes);
+        let num = time;
+        let hours = num / 60;
+        let rhours = Math.floor(hours);
+        let minutes = (hours - rhours) * 60;
+        let rminutes = Math.round(minutes);
         return rhours + ' hrs & ' + rminutes + ' mins';
       }
     },
-    sort(event) {
-      const index = event ? event.target.options.selectedIndex : 0;
+    sort() {
+      const index = this.comSort ? this.comSort : 0;
       let comments = [];
       if (index == 0) {
         comments = this.comments.sort((a, b) => {
@@ -152,7 +173,7 @@ export default {
       this.commentAlertVarient = 'bg-blue-500';
       this.commentAlertMsg = 'Please wait! posting your comment.';
 
-      console.log(values);
+      // console.log(values);
       const comment = {
         comment: values.comment,
         datePosted: new Date().toString(),
@@ -170,7 +191,7 @@ export default {
         this.commentAlertMsg = 'Comment posted.';
         await this.getComments();
       } catch (err) {
-        console.log(err);
+        // console.log(err);
         this.commentInSubmition = false;
         this.commentAlertVarient = 'bg-red-500';
         this.commentAlertMsg = 'Something unexpected happened.';
@@ -189,7 +210,7 @@ export default {
           this.song = { id: docSnap.id, ...docSnap.data() };
         }
       }
-      console.log(this.song);
+      // console.log(this.song);
     },
     async getComments() {
       const { query, where, getDocs } = document;
@@ -207,10 +228,17 @@ export default {
     },
   },
   async created() {
+    let { comSort } = this.$route.query;
+    this.comSort = comSort == 0 || comSort == 1 ? comSort : 0;
     await this.getSong();
     await this.getComments();
   },
+  // beforeUnmount() {
+  //   this.$router.push({
+  //     query: {
+  //       comSort: this.comSort,
+  //     },
+  //   });
+  // },
 };
 </script>
-
-<style></style>

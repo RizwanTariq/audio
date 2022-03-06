@@ -1,9 +1,11 @@
 <template>
-  <!-- Introduction -->
-  <intro />
+  <main>
+    <!-- Introduction -->
+    <intro />
 
-  <!-- Main Content -->
-  <main-content :allSongs="allSongs" />
+    <!-- Main Content -->
+    <main-content :allSongs="allSongs" />
+  </main>
 </template>
 
 <script>
