@@ -33,24 +33,6 @@
           ></div>
         </div>
       </div>
-      <!-- <div class="mb-4">
-        <div class="font-bold text-sm">Just another song.mp3</div>
-        <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
-          <div
-            class="transition-all progress-bar bg-blue-400"
-            style="width: 35%"
-          ></div>
-        </div>
-      </div>
-      <div class="mb-4">
-        <div class="font-bold text-sm">Just another song.mp3</div>
-        <div class="flex h-4 overflow-hidden bg-gray-200 rounded">
-          <div
-            class="transition-all progress-bar bg-blue-400"
-            style="width: 55%"
-          ></div>
-        </div>
-      </div> -->
     </div>
   </div>
 </template>
@@ -93,6 +75,18 @@ export default {
           file.size > 10 * 1024 * 1024
         ) {
           return null;
+        }
+
+        if (!window.navigator.onLine) {
+          this.uploadings.push({
+            task: {},
+            progressBar: 100,
+            name: file.name,
+            varient: 'bg-red-400',
+            textClass: 'text-red-400',
+            icon: 'fas fa-times',
+          });
+          return;
         }
 
         const songsRef = sRef(storage, `songs/${uniqueName(file.name)}`);
@@ -152,6 +146,7 @@ export default {
     //   this.uploadings.forEach((upload) => upload.task.cancel());
     // },
   },
+  //Before Unmount Lifecycle Method
   beforeUnmount() {
     this.uploadings.forEach((upload) => upload.task.cancel());
   },

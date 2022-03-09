@@ -210,7 +210,7 @@ export default {
       }
     },
     async handleSongDelete(song) {
-      console.log('first');
+      // console.log('first');
       // this.deleteSongShowAlert = true;
       this.deleteSongInSubmition = true;
       // this.deleteSongAlertVarient = 'bg-blue-500';

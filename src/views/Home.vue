@@ -48,7 +48,7 @@ export default {
         Math.floor(scrollTop) + innerHeight === offsetHeight;
       if (bottomOfWindow) {
         this.getSongs();
-        console.log('BottomOfWindow', this.lastVisible);
+        // console.log('BottomOfWindow', this.lastVisible);
       }
     },
     async getSongs() {

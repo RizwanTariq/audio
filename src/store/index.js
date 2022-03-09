@@ -193,7 +193,7 @@ export default createStore({
     },
     //Toggle Audio
     async toggleAudio({ state, commit }, payload) {
-      console.log('ToggleAudio');
+      // console.log('ToggleAudio');
       if (!state.sound.playing) {
         return;
       }
@@ -220,7 +220,7 @@ export default createStore({
       state.sound.once('seek', () => {
         dispatch('progress');
       });
-      console.log('Seek ACtion', x);
+      // console.log('Seek ACtion', x);
     },
   },
   modules: {},
