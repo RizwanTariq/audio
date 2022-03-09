@@ -6,7 +6,7 @@
         class="text-white font-bold uppercase text-2xl mr-4"
         :to="{ name: 'Home' }"
         active-class="no-active"
-        >Music</router-link
+        >{{ $t('header.music') }}</router-link
       >
 
       <div class="flex flex-grow items-center">
@@ -15,26 +15,33 @@
           <!-- Navigation Links -->
           <li>
             <router-link class="px-2 text-white" :to="{ name: 'About' }">
-              About
+              {{ $t('header.about') }}
             </router-link>
           </li>
           <li v-if="!userLoggedin">
-            <a class="px-2 text-white" href="#" @click.prevent="toggleAuth"
-              >Login / Register</a
+            <a class="px-2 text-white" href="#" @click.prevent="toggleAuth">
+              {{ $t('header.log') }}</a
             >
           </li>
           <template v-else>
             <li>
-              <router-link class="px-2 text-white" :to="{ name: 'Manage' }"
-                >Manage</router-link
+              <router-link class="px-2 text-white" :to="{ name: 'Manage' }">
+                {{ $t('header.manage') }}</router-link
               >
             </li>
             <li>
-              <a class="px-2 text-white" href="#" @click.prevent="signOut"
-                >Logout</a
+              <a class="px-2 text-white" href="#" @click.prevent="signOut">
+                {{ $t('header.logout') }}</a
               >
             </li>
           </template>
+        </ul>
+        <ul class="flex flex-row mt-1 ml-auto">
+          <li>
+            <a class="px-2 text-white" href="#" @click.prevent="changeLocale">
+              {{ currentLocale }}
+            </a>
+          </li>
         </ul>
       </div>
     </nav>
@@ -47,6 +54,15 @@ export default {
   name: 'AppHeader',
   computed: {
     ...mapState(['userLoggedin']),
+    currentLocale() {
+      if (this.$i18n.locale === 'ur') {
+        return 'اردو';
+      } else if (this.$i18n.locale === 'en') {
+        return 'English';
+      } else {
+        return 'français';
+      }
+    },
   },
   methods: {
     ...mapMutations(['toggleAuth']),
@@ -61,6 +77,15 @@ export default {
         this.$router.push({ name: 'Home' });
       }
       // window.location.reload();
+    },
+    changeLocale() {
+      if (this.$i18n.locale === 'ur') {
+        this.$i18n.locale = 'fr';
+      } else if (this.$i18n.locale === 'en') {
+        this.$i18n.locale = 'ur';
+      } else {
+        this.$i18n.locale = 'en';
+      }
     },
   },
 };

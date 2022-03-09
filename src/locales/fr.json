@@ -1,0 +1,26 @@
+{
+  "header": {
+    "about": "Sur",
+    "log": "Connexion / S'inscrire",
+    "logout": "Se déconnecter",
+    "manage": "Faire en sorte",
+    "music": "La musique"
+  },
+  "home": {
+    "desc": " Commencez à écouter les meilleures nouveautés.",
+    "listen": "Écoutez de la bonne musique !"
+  },
+  "mainContent": {
+    "title": "Chansons"
+  },
+  "mySongs": {
+    "title": "Mes chansons"
+  },
+  "sondDetails": {
+    "comments": "No commentaires|1 Commenter|{count} commentaires"
+  },
+  "upload": {
+    "drop": "Déposez vos fichiers ici",
+    "title": "Télécharger"
+  }
+}

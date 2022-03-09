@@ -1,0 +1,26 @@
+{
+  "header": {
+    "about": "بارے میں",
+    "log": "لاگ ان کریں / رجسٹر کریں۔",
+    "logout": "لاگ آوٹ",
+    "manage": "انتظام",
+    "music": "موسیقی"
+  },
+  "home": {
+    "desc": "بہترین نئی ریلیز کو سننا شروع کریں۔",
+    "listen": "زبردست موسیقی سنیں !"
+  },
+  "mainContent": {
+    "title": "گانے"
+  },
+  "mySongs": {
+    "title": "میرے گانے"
+  },
+  "sondDetails": {
+    "comments": "No Comments|1 Comment|{count} Comments"
+  },
+  "upload": {
+    "drop": "اپنی فائلیں یہاں چھوڑ دیں۔",
+    "title": "اپ لوڈ کریں۔"
+  }
+}

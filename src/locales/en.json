@@ -1,0 +1,26 @@
+{
+  "header": {
+    "about": "About",
+    "log": "Login / Register",
+    "logout": "Logout",
+    "manage": "Manage",
+    "music": "Music"
+  },
+  "home": {
+    "desc": "Start listening to the best new releases.",
+    "listen": "Listen to Great Music !"
+  },
+  "mainContent": {
+    "title": "Songs"
+  },
+  "mySongs": {
+    "title": "My Songs"
+  },
+  "sondDetails": {
+    "comments": "No Comments|1 Comment|{count} Comments"
+  },
+  "upload": {
+    "drop": "Drop your files here",
+    "title": "Upload"
+  }
+}
