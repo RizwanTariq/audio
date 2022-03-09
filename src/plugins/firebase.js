@@ -19,6 +19,7 @@ import {
   startAfter,
   where,
   deleteDoc,
+  enableIndexedDbPersistence,
 } from 'firebase/firestore';
 
 import {
@@ -29,6 +30,7 @@ import {
   deleteObject,
 } from 'firebase/storage';
 
+// (1)Firebase Config File
 const firebaseConfig = {
   apiKey: 'AIzaSyBogczGVlTZoU89rHjGqJtaWtGYnvWU0gQ',
   authDomain: 'audio-app-1234.firebaseapp.com',
@@ -38,13 +40,32 @@ const firebaseConfig = {
   appId: '1:459668403662:web:ea1ce9cf49b43d9ccf679f',
 };
 
-// Initialize Firebase
+// (2)Initialize Firebase
 const app = initializeApp(firebaseConfig);
 export default app;
 
+// (3)Authentication Instance
 export const auth = getAuth();
+
+// (4)Firestore cloud Db instance
 export const db = getFirestore(app);
+
+//Firebase data Persistence Enabled
+enableIndexedDbPersistence(db).catch((err) => {
+  if (err.code == 'failed-precondition') {
+    console.log(
+      'Multiple tabs open, persistence can only be enabled in one tab at a a time.'
+    );
+  } else if (err.code == 'unimplemented') {
+    console.log(
+      ' The current browser does not support all of the features required to enable persistence.'
+    );
+  }
+});
+
+//Storage Instance
 const storage = getStorage();
+
 export const firebaseStorage = {
   storage,
   sRef,
